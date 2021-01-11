@@ -38,7 +38,8 @@ __Documentation__
   [f blimit btimeout bconcurrency])
 
 ;; f
-;;  the function to execute after blimit/btimeout with the accumulated inputs
+;;  Single arity function to execute after blimit/btimeout with the accumulated inputs. 
+;;  The parameter is a vector of inputs
 
 ;; blimit
 ;;  Maximum of blimit elements should be accumulated. Executes f when blimit is exceeded
