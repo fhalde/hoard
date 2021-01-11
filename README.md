@@ -23,8 +23,6 @@ A thread-safe generic bulk processing library in Clojure
 ```
 __The bulk-processor reifies the following protocol__
 ```clj
-;; 
-
 (defprotocol IBulkProcessor
   (-close [this])
   (-flush [this])
