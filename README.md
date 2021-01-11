@@ -2,9 +2,9 @@
 
 
 # hoard
-> Hoarding can never end, for the heart of man always covets for more
-
 A thread-safe generic bulk processing library in Clojure
+
+> Hoarding can never end, for the heart of man always covets for more
 
 ## Quickstart / Usage
 
