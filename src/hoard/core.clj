@@ -24,7 +24,7 @@
   (let [requests-ch (chan)
         controller-ch (chan)
         rate-limiter (chan bconcurrency)]
-    (go-loop [acc [] ccount 0 timer nil]
+    (go-loop [acc [] inflight 0 timer nil]
       (let [chs (concat [requests-ch controller-ch]
                         (when timer
                           [timer]))
@@ -38,10 +38,10 @@
                        (exec-with-limiter rate-limiter (f acc)))
                      (recur [] 0 nil))
             (let [acc (conj acc v)]
-              (if (<= blimit (+ 1 ccount))
+              (if (<= blimit (+ 1 inflight))
                 (do (exec-with-limiter rate-limiter (f acc))
                     (recur [] 0 nil))
-                (recur acc (inc ccount) (or timer (timeout btimeout))))))
+                (recur acc (inc inflight) (or timer (timeout btimeout))))))
           ;; timeout
           (when (seq acc)
             (exec-with-limiter rate-limiter (f acc))
