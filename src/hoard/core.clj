@@ -46,7 +46,7 @@
           (when (seq acc)
             (exec-with-limiter rate-limiter (f acc))
             (recur [] 0 nil)))))
-    (reify BProcessor
+    (reify IBulkProcessor
       (-close [_]
         (close! requests-ch)
         (>!! controller-ch :close)
