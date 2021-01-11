@@ -19,7 +19,7 @@ A thread-safe generic bulk processing library in Clojure
       concurrency 10
       bp (hc/bulk-processor (fn [acc] (swap! sum + (count acc))) chunk timer concurrency]
     (doseq [i (range 1000)]
-      (-add bp i))
+      (-add bp i)) ;; add is thread-safe
      ;; @sum = 1000
 ```
 __The bulk-processor reifies the following protocol__
@@ -27,7 +27,7 @@ __The bulk-processor reifies the following protocol__
 (defprotocol IBulkProcessor
   (-close [this])
   (-flush [this])
-  (-add [this request]))
+  (-add [this request])) ;; -add is thread-safe
 ```
 __Documentation__
 ```clj
