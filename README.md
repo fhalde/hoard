@@ -1,6 +1,9 @@
-# hoard
+<img src="https://i.pinimg.com/originals/5a/d0/47/5ad047a18772cf0488a908d98942f9bf.gif" alt="Hoard" height="300" width="300"/></a>
 
-A Clojure library designed to ... well, that part is up to you.
+
+# Hoard
+
+A generic bulk processing library in Clojure
 
 ## Usage
 
