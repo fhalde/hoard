@@ -3,11 +3,51 @@
 
 # Hoard
 
-A generic bulk processing library in Clojure
+A thread-safe generic bulk processing library in Clojure
 
-## Usage
+## Quickstart / Usage
 
-FIXME
+
+
+```clj
+(require '[hoard.core :as hc])
+
+(let [sum (atom 0)
+      chunk 100
+      timer 1000
+      concurrency 10
+      bp (hc/bulk-processor (fn [acc] (swap! sum + (count acc))) chunk timer concurrency]
+    (doseq [i (range 1000)]
+      (-add bp i))
+     ;; @sum = 1000
+```
+__The bulk-processor reifies the following protocol__
+```clj
+;; 
+
+(defprotocol IBulkProcessor
+  (-close [this])
+  (-flush [this])
+  (-add [this request]))
+```
+__Documentation__
+```clj
+(defn bulk-processor
+  [f blimit btimeout bconcurrency])
+
+;; f
+;;  the function to execute after blimit/btimeout with the accumulated inputs
+
+;; blimit
+;;  Maximum of blimit elements should be accumulated. Executes f when blimit is exceeded
+
+;; btimeout
+;;  Run f after btimeout (ms). The timer is not periodic. 
+;;  The timer starts when -add adds the 1st value in the accumulating buffer. -add does not reset the timer
+
+;; bconcurrency
+;;  Numer of instances of f running at any given point of time (must be > 0)
+```
 
 ## License
 
