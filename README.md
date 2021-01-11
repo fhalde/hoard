@@ -1,5 +1,7 @@
 # hoard
-A thread-safe generic bulk processing library in Clojure. Good for usecases when there are multiple sources trying to bulk process
+A thread-safe generic bulk processing library in Clojure. 
+
+- Good for usecases when there are multiple sources trying to bulk process
 > Hoarding can never end, for the heart of man always covets for more
 
 
