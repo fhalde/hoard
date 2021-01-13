@@ -18,8 +18,8 @@
   [f listener rate-limiter requests]
   (thread
     (>!! rate-limiter :exec)
-    (-before listener requests)
     (try
+      (-before listener requests)
       (-success listener requests (f requests))
       (catch Exception e
         (-failure listener requests e))
