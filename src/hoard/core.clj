@@ -1,6 +1,11 @@
 (ns hoard.core
   (:require [clojure.core.async :refer [<!! chan >!! go-loop timeout alts! >! thread close!]]))
 
+;; provide callbacks for different steps during the function execution
+(defprotocol IBulkProcessorListener
+  (-before [this requests])
+  (-success [this requests response])
+  (-failure [this requests exception]))
 
 (defprotocol IBulkProcessor
   (-close [this])
@@ -9,18 +14,19 @@
 
 
 (defmacro exec-with-limiter
-  [limiter & body]
+  [limiter handler]
   `(do
      (>! ~limiter :exec)
      (thread
        (try
+         (-before 
          ~@body
          (finally
            (<!! ~limiter))))))
 
 
 (defn bulk-processor
-  [f blimit btimeout bconcurrency]
+  [f blistener blimit btimeout bconcurrency]
   (let [requests-ch (chan)
         controller-ch (chan)
         rate-limiter (chan bconcurrency)]
@@ -32,7 +38,7 @@
         (if v
           (case v
             :close (when (seq acc)
-                     (exec-with-limiter rate-limiter (f acc)))
+                     (exec-with-limiter rate-limiter (f acc) blistener))
             :flush (do
                      (when (seq acc)
                        (exec-with-limiter rate-limiter (f acc)))
