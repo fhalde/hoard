@@ -32,7 +32,7 @@
   (let [requests-ch (chan)
         controller-ch (chan)
         rate-limiter (chan bconcurrency)
-        exec (partial f blistener rate-limiter)]
+        exec (partial exec-with-limiter f blistener rate-limiter)]
     (go-loop [acc [] inflight 0 timer nil]
       (let [chs (concat [requests-ch controller-ch]
                         (when timer
